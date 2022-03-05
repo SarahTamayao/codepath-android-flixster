@@ -28,6 +28,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="#00BCD4"
         android:textSize="22sp"
+        android:transitionName="tvTitle-transition"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivPoster"
         app:layout_constraintTop_toTopOf="parent" />
@@ -43,6 +44,7 @@
         android:maxLines="5"
         android:text="Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a super-hero. When he asks for help from Doctor Strange the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man."
         android:textColor="#FFFFFF"
+        android:transitionName="tvOverview-transition"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivPoster"
