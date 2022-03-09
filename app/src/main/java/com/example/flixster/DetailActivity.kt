@@ -12,7 +12,6 @@ import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerView
 import okhttp3.Headers
-import org.w3c.dom.Text
 
 private const val TAG = "DetailActivity"
 
