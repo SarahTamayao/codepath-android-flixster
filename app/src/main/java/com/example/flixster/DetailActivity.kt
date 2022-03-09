@@ -15,9 +15,6 @@ import okhttp3.Headers
 import org.w3c.dom.Text
 
 private const val TAG = "DetailActivity"
-private const val YOUTUBE_API_KEY = "AIzaSyD2sdEgXQXOxP_ZrgzqPDAxzYv2Kh4HdDc"
-private const val TRAILERS_URL =
-    "https://api.themoviedb.org/3/movie/%d/videos?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed"
 
 class DetailActivity : YouTubeBaseActivity() {
 
@@ -43,57 +40,61 @@ class DetailActivity : YouTubeBaseActivity() {
         ratingBar.rating = movie.rating.toFloat()
 
         val client = AsyncHttpClient()
-        client.get(TRAILERS_URL.format(movie.movieId), object : JsonHttpResponseHandler() {
-            override fun onFailure(
-                statusCode: Int,
-                headers: Headers?,
-                response: String?,
-                throwable: Throwable?
-            ) {
-                Log.i(TAG, "onFailure $statusCode")
-            }
-
-            override fun onSuccess(statusCode: Int, headers: Headers?, json: JSON) {
-                Log.i(TAG, "onSuccess")
-                //parse YouTube id
-                var results = json.jsonObject.getJSONArray("results")
-                //use the first element
-                if (results.length() == 0) {
-                    //no trailer
-                    Log.w(TAG, "No movie trailers found")
-                    return
+        client.get(
+            BuildConfig.TRAILERS_URL.format(movie.movieId),
+            object : JsonHttpResponseHandler() {
+                override fun onFailure(
+                    statusCode: Int,
+                    headers: Headers?,
+                    response: String?,
+                    throwable: Throwable?
+                ) {
+                    Log.i(TAG, "onFailure $statusCode")
                 }
-                val movieTrailerJson = results.getJSONObject(0)
-                val youtubeKey = movieTrailerJson.getString("key")
-                //play the youtube video with this trailer
-                initializeYoutube(youtubeKey, movie.rating)
-            }
 
-        })
+                override fun onSuccess(statusCode: Int, headers: Headers?, json: JSON) {
+                    Log.i(TAG, "onSuccess")
+                    //parse YouTube id
+                    var results = json.jsonObject.getJSONArray("results")
+                    //use the first element
+                    if (results.length() == 0) {
+                        //no trailer
+                        Log.w(TAG, "No movie trailers found")
+                        return
+                    }
+                    val movieTrailerJson = results.getJSONObject(0)
+                    val youtubeKey = movieTrailerJson.getString("key")
+                    //play the youtube video with this trailer
+                    initializeYoutube(youtubeKey, movie.rating)
+                }
+
+            })
     }
 
     private fun initializeYoutube(youtubeKey: String, rating: Double) {
-        ytPlayerView.initialize(YOUTUBE_API_KEY, object : YouTubePlayer.OnInitializedListener {
-            override fun onInitializationSuccess(
-                provider: YouTubePlayer.Provider?,
-                player: YouTubePlayer?,
-                p2: Boolean
-            ) {
-                Log.i(TAG, "onInitializationSuccess")
-                if (rating >= 5) {
-                    player?.loadVideo(youtubeKey)
-                } else {
-                    player?.cueVideo(youtubeKey)
-                    Log.i(TAG,"here")
+        ytPlayerView.initialize(
+            BuildConfig.YOUTUBE_API_KEY,
+            object : YouTubePlayer.OnInitializedListener {
+                override fun onInitializationSuccess(
+                    provider: YouTubePlayer.Provider?,
+                    player: YouTubePlayer?,
+                    p2: Boolean
+                ) {
+                    Log.i(TAG, "onInitializationSuccess")
+                    if (rating >= 5) {
+                        player?.loadVideo(youtubeKey)
+                    } else {
+                        player?.cueVideo(youtubeKey)
+                        Log.i(TAG, "here")
+                    }
                 }
-            }
 
-            override fun onInitializationFailure(
-                p0: YouTubePlayer.Provider?,
-                p1: YouTubeInitializationResult?
-            ) {
-                Log.i(TAG, "onInitializationFailure")
-            }
-        })
+                override fun onInitializationFailure(
+                    p0: YouTubePlayer.Provider?,
+                    p1: YouTubeInitializationResult?
+                ) {
+                    Log.i(TAG, "onInitializationFailure")
+                }
+            })
     }
 }

@@ -10,9 +10,8 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
 import okhttp3.Headers
 import org.json.JSONException
 
+
 private const val TAG = "MainActivity"
-private const val NOW_PLAYING_URL =
-    "https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed"
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,7 +27,6 @@ class MainActivity : AppCompatActivity() {
     // 6. Bind a layout manager to the RecyclerView --done
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -39,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         rvMovies.layoutManager = LinearLayoutManager(this)
 
         val client = AsyncHttpClient()
-        client.get(NOW_PLAYING_URL, object : JsonHttpResponseHandler() {
+        client.get(BuildConfig.NOW_PLAYING_URL, object : JsonHttpResponseHandler() {
             override fun onFailure(
                 statusCode: Int,
                 headers: Headers?,
@@ -59,7 +57,7 @@ class MainActivity : AppCompatActivity() {
                     //notify adapter that the movie dataset has been updated
                     movieAdapter.notifyDataSetChanged()
                     Log.i(TAG, "Movie list $movies")//doesnt log?
-                } catch(e: JSONException){
+                } catch (e: JSONException) {
                     Log.e(TAG, "Encountered JSON exception $e")
                 }
 
